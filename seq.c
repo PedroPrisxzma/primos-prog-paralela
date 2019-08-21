@@ -15,14 +15,15 @@ Number *sequential(int n){
   }
 
   int current_prime = 2; // The first prime number in a given array
-  int start_index = 0; // The first prime index
 
-  while(current_prime < n){
-    printf("%d, %d\n", current_prime, n);
+  int *start_index = (int*) calloc(1, sizeof(int)); // The first prime index
+  start_index[0] = 0;
+
+  // Only need to look up the current_prime of half of the number
+  while(current_prime < (n+1)/2){
     mark_primes(n, current_prime, nums_array);
-    current_prime = find_next_prime(n, nums_array, &start_index);
+    current_prime = find_next_prime(n, nums_array, start_index);
   }
-
   return(nums_array);
 }
 
@@ -33,18 +34,22 @@ void mark_primes(int n, int current_prime, Number* nums_array){
     // Find a multiple inside the array
     aux = nums_array[i].value * current_prime;
 
-    // Mark the multiple as a non prime number
-    nums_array[aux-2].prime = -1;
-
-    printf("value: %d, aux: %d, prime: %d\n",nums_array[i].value, aux, nums_array[i].prime);
+    // Makes sure no values over n are marked causing an error
+    if(aux <= n){
+      // Mark the multiple as a non prime number
+      nums_array[aux-2].prime = -1;
+    }
+    else{
+      break;
+    }
   }
 }
 
 // Finds the next prime number, returns n+1 if no prime numbers are left
 int find_next_prime(int n, Number* nums_array, int *index){
-  printf("finding next prime\n%d, %d\n", index[0], n-1);
   for(int i = index[0]+1; i < n-1; i++){
     if(nums_array[i].prime == 0){
+      index[0] = i;
       return nums_array[i].value;
     }
   }
