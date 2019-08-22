@@ -1,7 +1,7 @@
 CC=gcc
-CFLAGS= -g -O0 -Wall -Wextra -Werror -std=c99 -pthread
-DEPS = parallel.h seq.h
-OBJ = main.o parallel.o seq.o
+CFLAGS= -g -O0 -Wall -Wextra -Werror -std=c99 -fopenmp
+DEPS = parallel.h seq.h aux.h
+OBJ = main.o parallel.o seq.o aux.o
 Vflags = valgrind --leak-check=full
 
 %.o: %.c $(DEPS)
